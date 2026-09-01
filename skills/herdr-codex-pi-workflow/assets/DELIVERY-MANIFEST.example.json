@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "docs_dir": "/absolute/path/to/docs/feature",
+  "test_runner": "bru",
+  "test_environment": "approved-test-environment",
+  "test_timeout_ms": 120000,
+  "allow_side_effects": true,
+  "interface_change": true,
+  "changed_endpoints": [
+    {
+      "method": "POST",
+      "path": "/real/changed/path",
+      "positive_cases": [
+        {
+          "id": "post-normal",
+          "bruno_file": "cases/post-normal.bru",
+          "result_file": "evidence/post-normal.json",
+          "result_sha256": "sha256-of-the-real-result-file",
+          "execution_receipt_file": "evidence/post-normal.receipt.json",
+          "status": "PASS"
+        }
+      ],
+      "negative_cases": [
+        {
+          "id": "post-invalid-input",
+          "bruno_file": "cases/post-invalid-input.bru",
+          "result_file": "evidence/post-invalid-input.json",
+          "result_sha256": "sha256-of-the-real-result-file",
+          "execution_receipt_file": "evidence/post-invalid-input.receipt.json",
+          "status": "PASS"
+        }
+      ]
+    }
+  ]
+}

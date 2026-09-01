@@ -1,0 +1,21 @@
+.DS_Store
+.env
+.env.*
+*.log
+*.tmp
+*.bak
+config.json
+notifications.json
+notification-events.jsonl
+.workflow.lock
+.pending-mutation.json
+
+# Local workflow state and task history
+tasks/
+
+# Test and build output
+coverage/
+dist/
+node_modules/
+__pycache__/
+*.pyc
