@@ -127,6 +127,7 @@ Deployment/push evidence exists, every `origin/<pushed_branch>` resolves to the 
 - delivery documents and Bruno cases contain no placeholders;
 - interface changes list every changed endpoint with at least one positive and one negative scenario;
 - **Filter Benchmark & Cross-Channel Parity Contract**: 查询/明细类接口的 Bruno 与测试用例必须覆盖每个独立查询参数的正负隔离用例；多端共享接口必须提供同客户跨端（如 PAD 与后管）一致性调用证据；
+- **Cache Lifecycle & Rejection Observability Contract**: 涉及规则配置修改/审批生效的功能必须提供 Redis/二级缓存显式刷新证据；涉及业务规则过滤/拒绝的分支必须有日志断言证明输出了【规则要求 vs 实际事实】结构化对比；
 - all repository remote commits equal approved commits (or reviewed commits for quick-code).
 - `state_revision`, frozen mode/config hash, and the latest successful reconciliation must be present for schema v4 runs.
 

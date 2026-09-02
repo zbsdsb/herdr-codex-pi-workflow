@@ -90,6 +90,11 @@ Testing standard (mutation-sensitivity):
 - **Filter & Parity Isolation Testing**:
   - 对于查询/明细接口，必须为每一个筛选入参编写正向与反向隔离测试用例（如单传小类 A 时仅返回 A 数据，单传小类 B 时仅返回 B 数据，禁止仅做全量无参测试）；
   - 对于跨多端（PAD/后管/会员中心）共享接口，必须提供同客户跨端等价调用的对比单测或集成验证证据，严禁出现一端能查另一端查不出的口径漂移。
+- **AI Invariant Self-Check Checklist**:
+  - **Entity & Scope Invariants**: Confirm entity ID semantics (e.g. core system client ID vs platform client ID) and tenant/branch scopes (e.g. global virtual account `999999` vs user/operator branch `brNo`) against real database schemas before writing queries.
+  - **Cache & Parameter Lifecycle**: Global/shared rules must be retrieved via dedicated parameter services with local/Redis caching; any parameter modification/approval MUST explicitly evict/refresh cache keys/prefixes.
+  - **Observability On Rejections**: Any business filtering, rejection, or cutoff must log structured comparison of `[rule requirement vs actual fact]`.
+  - **Authentic Data-Driven Unit Tests**: Unit tests must assert both positive paths and rejection formatting; never use stub mocks that always return true regardless of parameters.
 
 Test environment rule: run only service-free checks locally. If a test requires a running service, Docker/Compose, Postgres, Redis, real HTTP, browser E2E, or multi-service dependencies, use an approved isolated test environment through the project's remote-operations wrapper. Never start production dependencies just to satisfy verification. Record `local-no-service` or the approved remote environment with exact command and exit result in [ROUND_TEST_RESULTS_PATH].
 
@@ -175,8 +180,13 @@ Write the review with:
 4. **Filter Effectiveness & Cross-Channel Parity Audit**:
    - 必须逐一审查 SQL `WHERE` 条件与数据实体真实字段的映射关系（严禁大类字段过滤小类入参、严禁虚假过滤）；
    - 必须审查多端入口参数传递链路，确认各 Controller/Manager 未篡改或覆盖入参（如 `brNo`、`cifNo`），确保跨端查询一致性；
-5. test gaps and residual risks;
-6. scope delta and architecture-gate decision.
+5. **AI Defect & Lifecycle Invariant Checklist**:
+   - **ID & Scope Conflation**: Verify that entity IDs match underlying schema semantics (e.g. core client ID vs internal platform ID; branch `brNo` vs global tenant/virtual account `999999`).
+   - **Parameter Source & Multi-Level Cache Invalidation**: Verify that shared/global parameters read from dedicated services with local/Redis caching; confirm updates/approvals explicitly evict/refresh cache prefixes.
+   - **Observability On Rejections**: Check that any business filtering or rejection logs structured `[rule requirement vs actual fact]` comparison rather than silent/opaque rejections.
+   - **Mock Authenticity**: Reject unit tests that use generic stub mocks to paper over incorrect parameter retrieval methods or wrong SQL clauses.
+6. test gaps and residual risks;
+7. scope delta and architecture-gate decision.
 
 End the file with exactly one of:
 WORKFLOW_VERDICT: PASS
